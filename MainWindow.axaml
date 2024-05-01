@@ -1,0 +1,108 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="400"
+		Height="400" Width="350"
+        x:Class="AvaloniaMyProject.MainWindow"
+		x:CompileBindings="False"
+		CanResize="False"
+        Title="AvaloniaMyProject"
+		Background="Transparent">
+
+	<Window.Resources>
+		<LinearGradientBrush x:Key="TextBoxGradient"
+							 StartPoint="50%, 100%" EndPoint="0,1">
+			<GradientStop Color="#0065ff" Offset="0.5"/>
+			<GradientStop Color="#0065ff" Offset="0."/>
+		</LinearGradientBrush>
+
+		<LinearGradientBrush x:Key="TextBoxGradient2"
+							 StartPoint="75%, 100%" EndPoint="0,1">
+			<GradientStop Color="#edff00" Offset="0"/>
+			<GradientStop Color="Red" Offset="1"/>
+		</LinearGradientBrush>
+	</Window.Resources>
+
+	<Window.Styles>
+		<Style Selector="TextBox.h1">
+			<Setter Property="Height" Value="35"/>
+			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="CornerRadius" Value="10"/>
+			<Setter Property="FontFamily" Value="nunito"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="Background" Value="#0065ff"/>
+		</Style>
+
+		<Style Selector="TextBox">
+			<Setter Property="Background" Value="{StaticResource TextBoxGradient}"/>
+		</Style>
+
+		<Style Selector="Button">
+			<Setter Property="Background" Value="{StaticResource TextBoxGradient}"/>
+		</Style>
+	</Window.Styles>
+
+	<Border CornerRadius="20" Background="#08021c">
+		<Border.Background>
+			<LinearGradientBrush StartPoint="75%, 100%"
+								 EndPoint="0, 1">
+				<GradientStop Color="#060730"
+							  Offset="0.2"/>
+				<GradientStop Color="#0d1680"
+							  Offset="0.9"/>
+			</LinearGradientBrush>
+		</Border.Background>
+		<Grid ShowGridLines="False" RowDefinitions="*, *, 3*, *, 0.5*" ColumnDefinitions="*, 10*, *">
+
+			<TextBlock Grid.Row="0" Grid.Column="1"
+					   Text="Вход"
+					   FontSize="35"
+					   Foreground="White"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Bottom"
+					   Margin="0 10 0 0"
+					   FontFamily="nunito"
+					   FontWeight="Bold"/>
+
+			<StackPanel Grid.Row="2" Grid.Column="1">
+
+				<TextBox Watermark="Email"
+						 x:Name="EmailTextBox"
+						 Classes="h1"
+						 Margin="10"/>
+				<TextBox Watermark="Password"
+						 PasswordChar="*"
+						 x:Name="PasswordTextBox"
+						 Classes="h1"
+						 Margin="10"/>
+
+				<TextBlock Text="" 
+						   x:Name="ErrorMessage"
+						   Foreground="Red"
+						   HorizontalAlignment="Left"
+						   Margin="15 0 0 0"/>
+
+				<Button	Content="Войти в акканут"
+						CornerRadius="10"
+						Click="SignIn_ButtonClick"
+						   Foreground="Black"
+						   Margin="10 10 0 0"
+						   FontFamily="nunito"
+						   FontWeight="DemiBold"
+						   FontSize="15"/>
+
+			</StackPanel>
+
+			<Button Grid.Row="3" Grid.Column="1"
+					Content="войти как гость"
+					HorizontalAlignment="Center"
+					Background="Transparent"
+					Foreground="#ffb500"
+					FontSize="25"
+					FontFamily="nunito"
+					FontWeight="Bold"/>
+		</Grid>
+	</Border>
+</Window>
+

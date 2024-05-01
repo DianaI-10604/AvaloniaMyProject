@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AvaloniaMyProject
+{
+    public class User
+    {
+        public string Name { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Status { get; set; }
+
+        public List<User> users = new List<User>(); //тут будут все пользователи и их статусы
+
+        //Создать пользователя, который будет админом при каждом запуске программы
+    }
+}

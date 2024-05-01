@@ -1,0 +1,125 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="400"
+		Width="700" Height="400"
+        x:Class="AvaloniaMyProject.ManagerUserWindow"
+        x:CompileBindings="False"
+		Title="ManagerUserWindow"
+		Background="Transparent">
+
+	<Window.Styles>
+		<Style Selector="Button.btn">
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Foreground" Value="Blue"/>
+			<Setter Property="FontFamily" Value="nunito"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+		</Style>
+	</Window.Styles>
+
+	<!--Здесь будет меню менеджера, админа и гостя-->
+	<!--Но для менеджера и гостя кнопки будут скрыты-->
+
+	<Border Background="#08021c">
+		<!--Установили градиент окна-->
+		<Border.Background>
+			<LinearGradientBrush StartPoint="75%, 100%"
+								 EndPoint="0, 1">
+				<GradientStop Color="#0c1b52"
+							  Offset="0.3"/>
+				<GradientStop Color="#0d1680"
+							  Offset="0.8"/>
+			</LinearGradientBrush>
+		</Border.Background>
+
+		<Grid ShowGridLines="True"
+			  RowDefinitions="*,*, 5*, *"
+			  ColumnDefinitions="*, 7*, 2*">
+
+			<StackPanel Grid.Row="0" Orientation="Horizontal"
+						Grid.Column="0"
+						Grid.ColumnSpan="3">
+				<TextBlock x:Name="StatusBlock"/>
+				<TextBlock x:Name="NameBlock"/>
+			</StackPanel>
+
+			<TextBlock Grid.Row="1"
+					   Grid.Column="1"
+					   Text="Список товаров"
+					   FontFamily="nunito"
+					   Foreground="white"
+					   FontSize="30"
+					   FontWeight="Bold"/>
+
+			<ListBox Grid.Row="2" CornerRadius="10"
+					 Grid.Column="1"
+					 x:Name="listboxproducts"
+					 ItemsSource="{Binding ProductsList}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Vertical"
+									x:Name="Stack1">
+							<TextBlock FontWeight="Bold">
+								Наименование: <Run Text="{Binding Name}" FontWeight="Normal" Foreground="Black"
+												   FontFamily="nunito"/>
+							</TextBlock>
+							<TextBlock FontWeight="Bold">
+								Производитель: <Run Text="{Binding Manufacturer}" FontWeight="Normal" Foreground="Black"
+									FontFamily="nunito"/>
+							</TextBlock>
+							<TextBlock FontWeight="Bold" TextWrapping="Wrap">
+								Описание: <Run Text="{Binding Description}" FontWeight="Normal" Foreground="Black"
+										 FontFamily="nunito"/>
+							</TextBlock>
+							<TextBlock FontWeight="Bold">
+								Остаток: <Run Text="{Binding Quantity}" FontWeight="Normal" Foreground="Black"
+										  FontFamily="nunito"/>
+							</TextBlock>
+							<TextBlock FontWeight="Bold">
+								Стоимость: <Run Text="{Binding Cost}" FontWeight="Normal" Foreground="Black"
+										FontFamily="nunito"/>
+							</TextBlock>
+
+							<StackPanel Orientation="Horizontal">
+								<Button Content="Удалить" Classes="btn"
+										x:Name="DeleteProduct"
+										IsVisible="{Binding IsAdmin}"
+										Click="DeleteButton_Click"/>
+								
+								<Button Content="Редактировать" Classes="btn"
+										x:Name="EditProduct"
+										IsVisible="{Binding IsAdmin}"
+										Click="EditButton_Click"/>
+							</StackPanel>
+
+							<Border Height="10" Background="#0c1b52"
+									Width="700"/>
+
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+
+			<TextBlock Grid.Row="3"
+					   Grid.Column="1"
+					   Text=""
+					   x:Name="StatusMessage"
+					   Foreground="Red"
+					   TextDecorations="underline"
+					   FontSize="20"/>
+			<StackPanel Grid.Row="2"
+						Grid.Column="2"
+						HorizontalAlignment="Center">
+				<Button Content="Добавить"
+						x:Name="AddProduct"
+						IsVisible="True"
+						Classes="btn"
+						FontSize="18"/>
+
+			</StackPanel>
+		</Grid>
+
+	</Border>
+</Window>
+
