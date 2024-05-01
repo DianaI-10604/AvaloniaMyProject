@@ -2,8 +2,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="400"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
 		Width="700" Height="400"
+		CanResize="False"
         x:Class="AvaloniaMyProject.ManagerUserWindow"
         x:CompileBindings="False"
 		Title="ManagerUserWindow"
@@ -33,15 +34,17 @@
 			</LinearGradientBrush>
 		</Border.Background>
 
-		<Grid ShowGridLines="True"
-			  RowDefinitions="*,*, 5*, *"
-			  ColumnDefinitions="*, 7*, 2*">
+		<Grid ShowGridLines="False"
+			  RowDefinitions="0.6*,*, 5*, 0.5*"
+			  ColumnDefinitions="0.5*, 8*, 2*">
 
 			<StackPanel Grid.Row="0" Orientation="Horizontal"
 						Grid.Column="0"
 						Grid.ColumnSpan="3">
-				<TextBlock x:Name="StatusBlock"/>
-				<TextBlock x:Name="NameBlock"/>
+				<TextBlock x:Name="StatusBlock" Foreground="White" FontSize="18" FontFamily="nunito"
+						   FontWeight="Bold" Margin="35 0 0 0"/>
+				<TextBlock x:Name="NameBlock" Foreground="White" FontSize="18" Margin="10 0 0 0"
+						   FontFamily="nunito" FontWeight="Bold"/>
 			</StackPanel>
 
 			<TextBlock Grid.Row="1"
@@ -107,7 +110,8 @@
 					   x:Name="StatusMessage"
 					   Foreground="Red"
 					   TextDecorations="underline"
-					   FontSize="20"/>
+					   FontSize="15"/>
+			
 			<StackPanel Grid.Row="2"
 						Grid.Column="2"
 						HorizontalAlignment="Center">

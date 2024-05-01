@@ -28,6 +28,9 @@ namespace AvaloniaMyProject
             _currentUser = currentUser; // Инициализация _currentUser
             InitializeComponent(); // Инициализация компонентов
 
+            StatusBlock.Text = "Статус: " + _currentUser.Status;
+            NameBlock.Text = "Имя: " + _currentUser.Name;
+
             // Добавляем элемент в список
             ProductsList.Add(
                 new Products()
@@ -57,6 +60,7 @@ namespace AvaloniaMyProject
             if (_currentUser.Status != "Admin")
             {
                 addProductButton.IsVisible = false;
+                StatusMessage.Text = "Вы можете только просматривать товары";
             }
             else
             {
