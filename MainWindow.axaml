@@ -14,7 +14,7 @@
 		<LinearGradientBrush x:Key="TextBoxGradient"
 							 StartPoint="50%, 100%" EndPoint="0,1">
 			<GradientStop Color="#0065ff" Offset="0.5"/>
-			<GradientStop Color="#0065ff" Offset="0."/>
+			<GradientStop Color="#0065ff" Offset="0.5"/>
 		</LinearGradientBrush>
 
 		<LinearGradientBrush x:Key="TextBoxGradient2"
@@ -83,7 +83,7 @@
 						   HorizontalAlignment="Left"
 						   Margin="15 0 0 0"/>
 
-				<Button	Content="Войти в акканут"
+				<Button	Content="Войти в аккаунт"
 						CornerRadius="10"
 						Click="SignIn_ButtonClick"
 						   Foreground="Black"

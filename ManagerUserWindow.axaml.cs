@@ -95,7 +95,13 @@ namespace AvaloniaMyProject
         //отредактировать товар
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
+            Button editButton = (Button)sender;
 
+            Products editProduct = (Products)editButton.DataContext;
+
+            EditProduct prod = new EditProduct(editProduct);
+            prod.Show();
+            
         }
     }
 }
