@@ -37,6 +37,7 @@ namespace AvaloniaMyProject
             {
                 _product.Manufacturer = _productManufacturerEdit;
             }
+
             if (!string.IsNullOrWhiteSpace(_productDescriptionEdit))
             {
                 _product.Description = _productDescriptionEdit;

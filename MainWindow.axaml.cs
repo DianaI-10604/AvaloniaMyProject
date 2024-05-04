@@ -55,6 +55,7 @@ namespace AvaloniaMyProject
                     // Вход выполнен успешно
                     ManagerUserWindow muw = new ManagerUserWindow(usercheck);
                     muw.Show();
+                    this.Close();
                     
                 }
                 else

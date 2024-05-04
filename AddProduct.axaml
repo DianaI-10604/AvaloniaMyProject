@@ -4,10 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
 		Width="500" Height="300"
-        x:Class="AvaloniaMyProject.EditProduct"
+        x:Class="AvaloniaMyProject.AddProduct"
 		x:CompileBindings="False"
 		Background="Transparent"
-        Title="EditProduct">
+		CanResize="False"
+        Title="AddProduct">
 
 	<Window.Styles>
 		<Style Selector="TextBlock.h1">
@@ -19,6 +20,7 @@
 
 		<Style Selector="TextBox.editField">
 			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="FontWeight" Value="ExtraBold"/>
 			<Setter Property="Height" Value="30"/>
 			<Setter Property="Width" Value="200"/>
 		</Style>
@@ -35,22 +37,24 @@
 		<Grid ShowGridLines="False"
 			  RowDefinitions="0.9*, *, *, *, *"
 			  ColumnDefinitions="*, 10*, *">
-			
+
 			<TextBlock Grid.Row="0" Grid.Column="1"
-					   Text="Редактирование"
+					   Text="Добавление товара"
 					   HorizontalAlignment="Center"
 					   Classes="h1"/>
+
 
 			<StackPanel Grid.Row="1" Grid.Column="1"
 						Orientation="Horizontal"
 						HorizontalAlignment="Center">
-				<TextBox Name="ProductNameEdit"
-						 Watermark="{Binding Name}"
+				
+				<TextBox Name="AddProductName"
+						 Watermark="Наименование"
 						 Classes="editField"
 						 Margin="0 0 0 0"/>
 
-				<TextBox Name="ProductManufacturerEdit"
-						 Watermark="{Binding Manufacturer}"
+				<TextBox Name="AddProductManufacturer"
+						 Watermark="Производитель"
 						 Classes="editField"
 						 Margin="10 0 0 0"/>
 			</StackPanel>
@@ -58,20 +62,20 @@
 			<StackPanel Grid.Row="2" Grid.Column="1"
 						Orientation="Horizontal"
 						HorizontalAlignment="Center">
-				
-				<TextBox Name="ProductDescriptionEdit"
-						 Watermark="{Binding Description}"
+
+				<TextBox Name="AddProductDescription"
+						 Watermark="Описание"
 						 Classes="editField"
 						 Margin="0 0 0 0"/>
 
-				<TextBox Name="ProductQuantityEdit"
-						 Watermark="{Binding Quantity}"
+				<TextBox Name="AddProductQuantity"
+						 Watermark="Остаток на складе"
 						 Classes="editField"
 						 Margin="10 0 0 0"/>
 			</StackPanel>
 
-			<TextBox Name="ProductCostEdit"
-					 Watermark="{Binding Cost}"
+			<TextBox Name="AddProductCost"
+					 Watermark="Стоимость"
 					 Grid.Row="3" Grid.Column="1"
 					 Classes="editField"
 					 HorizontalAlignment="Left"
@@ -80,8 +84,9 @@
 			<StackPanel Grid.Row="4" Grid.Column="1"
 						VerticalAlignment="Center"
 						Orientation="Horizontal">
-				<Button Content="Применить изменения"
-						Click="ApplyEdit_ButtonClick"
+				
+				<Button Content="Добавить товар"
+						Click="AddProduct_ButtonClick"
 						Margin="3 0 0 0"
 						Background="White"
 						FontFamily="Nunito"
@@ -89,15 +94,13 @@
 						Foreground="#0065ff"
 						FontSize="15.2"
 						CornerRadius="5"/>
-				
-				<TextBlock Name="editResultMessage"
+
+				<TextBlock Name="AddResultMessage"
 						   Text=""
 						   FontSize="15"
 						   Margin="15 8 0 0"
 						   Foreground="Green"/>
 			</StackPanel>
-			
-			
 		</Grid>
 	</Border>
 </Window>

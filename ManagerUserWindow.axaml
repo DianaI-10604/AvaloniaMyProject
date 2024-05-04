@@ -112,18 +112,30 @@
 					   TextDecorations="underline"
 					   FontSize="15"/>
 			
-			<StackPanel Grid.Row="2"
-						Grid.Column="2"
-						HorizontalAlignment="Center">
-				<Button Content="Добавить"
-						x:Name="AddProduct"
-						IsVisible="True"
-						Classes="btn"
-						FontSize="18"/>
+						
+			<Button Grid.Row="2"
+					Grid.Column="2"
+					Content="Добавить"
+					HorizontalAlignment="Center"
+					VerticalAlignment="Top"
+					x:Name="AddProduct"
+					Click="AddProduct_ButtonClick"
+					Margin="10"
+					IsVisible="True"
+					Classes="btn"
+					FontSize="18"/>
 
-			</StackPanel>
+			<Button Grid.Row="2"
+					Grid.Column="2"
+					Content="Выйти"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Click="ExitToAuthorization_ButtonClick"
+					IsVisible="True"
+					Margin="15"
+					Classes="btn"
+					FontSize="18"/>
 		</Grid>
-
 	</Border>
 </Window>
 

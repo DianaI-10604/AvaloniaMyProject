@@ -9,9 +9,31 @@ namespace AvaloniaMyProject
 {
     public partial class ManagerUserWindow : Window
     {
-        public ObservableCollection<Products> ProductsList { get; set; } = new ObservableCollection<Products>();
         private User _currentUser;
         Products p = new Products();
+
+        public static ObservableCollection<Products> ProductsList { get; set; } = new ObservableCollection<Products>()
+        {
+            new Products()
+                {
+                    Name = "Galaxy A72",
+                    Manufacturer = "Samsung",
+                    Description = "256GB, Black, Защита от воды (IP67), 2 дня работы⁶ и поддержка супербыстрой зарядки 25 Вт," +
+                    "Безграничный⁴ 6.7''³ sAMOLED экран 90 Гц",
+                    Quantity = 356,
+                    Cost = 33210
+                },
+
+            new Products()
+               {
+                   Name = "Google Pixel 7",
+                   Manufacturer = "Google",
+                   Description = "диагональ экрана: 6.30\", количество основных камер: 2, память: 128 ГБ, 256 ГБ, оперативная память: 8 ГБ, " +
+                   "емкость аккумулятора: 4355 мА⋅ч, разрешение экрана: 2400x1080, частота обновления экрана: 90 Гц",
+                   Quantity = 321,
+                   Cost = 37990
+               }
+        };
 
         public ManagerUserWindow()
         {
@@ -19,7 +41,6 @@ namespace AvaloniaMyProject
 
             // Установка контекста данных окна на текущий объект
             DataContext = this;
-
         }
 
         public ManagerUserWindow(User currentUser)
@@ -32,29 +53,6 @@ namespace AvaloniaMyProject
             NameBlock.Text = "Имя: " + _currentUser.Name;
 
             // Добавляем элемент в список
-            ProductsList.Add(
-                new Products()
-                {
-                    Name = "Galaxy A72",
-                    Manufacturer = "Samsung",
-                    Description = "256GB, Black, Защита от воды (IP67), 2 дня работы⁶ и поддержка супербыстрой зарядки 25 Вт," +
-                    "Безграничный⁴ 6.7''³ sAMOLED экран 90 Гц",
-                    Quantity = 356,
-                    Cost = 33210
-                }
-           );
-
-            ProductsList.Add(
-               new Products()
-               {
-                   Name = "Google Pixel 7",
-                   Manufacturer = "Google",
-                   Description = "диагональ экрана: 6.30\", количество основных камер: 2, память: 128 ГБ, 256 ГБ, оперативная память: 8 ГБ, " +
-                   "емкость аккумулятора: 4355 мА⋅ч, разрешение экрана: 2400x1080, частота обновления экрана: 90 Гц",
-                   Quantity = 321,
-                   Cost = 37990
-               }
-          );
 
             Button addProductButton = this.FindControl<Button>("AddProduct");
             if (_currentUser.Status != "Admin")
@@ -101,7 +99,28 @@ namespace AvaloniaMyProject
 
             EditProduct prod = new EditProduct(editProduct);
             prod.Show();
-            
+        }
+        public void UpdateProductsList(Products newProduct)
+        {
+            ProductsList.Add(newProduct);
+        }
+
+        //добавляем товар в наш список
+        private void AddProduct_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            // Передаем ссылку на исходный список товаров в окно добавления товара
+            AddProduct ap = new AddProduct(this);
+            ap.Show();
+
+        }
+
+        //возвращаемся на окно авторизации
+        private void ExitToAuthorization_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            MainWindow auth = new MainWindow();
+            auth.Show();
+
+            this.Close();
         }
     }
 }
