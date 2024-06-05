@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Media;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AvaloniaMyProject
 {
-    public class Products : INotifyPropertyChanged
+    public class Products
     {
         private string _name;
         private string _manufacturer;
@@ -21,7 +22,7 @@ namespace AvaloniaMyProject
             set
             {
                 _name = value;
-                OnPropertyChanged(nameof(Name));
+               
             }
         }
 
@@ -31,7 +32,7 @@ namespace AvaloniaMyProject
             set
             {
                 _manufacturer = value;
-                OnPropertyChanged(nameof(Manufacturer));
+                
             }
         }
 
@@ -41,7 +42,7 @@ namespace AvaloniaMyProject
             set
             {
                 _description = value;
-                OnPropertyChanged(nameof(Description));
+               
             }
         }
 
@@ -51,7 +52,7 @@ namespace AvaloniaMyProject
             set
             {
                 _quantity = value;
-                OnPropertyChanged(nameof(Quantity));
+               
             }
         }
 
@@ -61,7 +62,7 @@ namespace AvaloniaMyProject
             set
             {
                 _cost = value;
-                OnPropertyChanged(nameof(Cost));
+                
             }
         }
 
@@ -72,17 +73,11 @@ namespace AvaloniaMyProject
             set
             {
                 _isAdmin = value;
-                OnPropertyChanged(nameof(IsAdmin));
+               
             }
         }
-        //добавить изображение для каждого товара
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public Products() { }
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+
+        public SolidColorBrush backgrColor { get; set; }
     }
 }

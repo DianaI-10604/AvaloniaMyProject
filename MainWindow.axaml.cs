@@ -2,6 +2,7 @@
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AvaloniaMyProject
@@ -11,34 +12,41 @@ namespace AvaloniaMyProject
         User user = new User();
         Products p = new Products();
 
+        //private Products _product;
+        public static List<Products> AllProducts = new List<Products>(); //здесь будем держать все значения товаров, чтобы они не очищались
+
+        public static List<User> Users = new List<User> {
+            new User
+            {
+                Name = "Ищенко Диана",
+                Login = "Diana_2004",
+                Password = "1234",
+                Status = "Admin"
+            },
+
+            new User()
+            {
+                Name = "vjskdfs",
+                Login = "1234",
+                Password = "1234",
+                Status = "User"
+            }
+        };
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        //сюда надо передать список товаров
+        public MainWindow(List<Products> products)
+        {
+            InitializeComponent();
+
+            AllProducts = products;
 
             // Устанавливаем текст прямо из кода
             ErrorMessage.Text = "";
-
-            //Это администратор
-            user.users.Add(
-                    new User()
-                    {
-                        Name = "Ищенко Диана",
-                        Login = "Diana_2004",
-                        Password = "1234",
-                        Status = "Admin"
-                    }
-                );
-
-            //авторизованный пользователь (тест видимости кнопок)
-            user.users.Add(
-                  new User()
-                  {
-                      Name = "Тютюнникова Анна",
-                      Login = "equestrian",
-                      Password = "1234",
-                      Status = "User"
-                  }
-              );
         }
 
         private void SignIn_ButtonClick(object sender, RoutedEventArgs e)
@@ -48,12 +56,13 @@ namespace AvaloniaMyProject
                 string login = EmailTextBox.Text;
                 string password = PasswordTextBox.Text;
 
-                User usercheck = user.users.FirstOrDefault(u => u.Login == login && u.Password == password);
+                //ищем первое совпадние в списке users
+                User usercheck = Users.FirstOrDefault(u => u.Login == login && u.Password == password);
 
                 if (usercheck != null)
                 {
                     // Вход выполнен успешно
-                    ManagerUserWindow muw = new ManagerUserWindow(usercheck);
+                    ManagerUserWindow muw = new ManagerUserWindow(usercheck, AllProducts);
                     muw.Show();
                     this.Close();
                     
@@ -65,6 +74,16 @@ namespace AvaloniaMyProject
                     PasswordTextBox.Clear();
                 }
             }
+        }
+
+        private void GuestMode_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            User guestUser = new User();
+            guestUser.Status = "гость";
+            ManagerUserWindow guest = new ManagerUserWindow(guestUser, AllProducts);
+
+            guest.Show();
+            this.Close();
         }
     }
 }

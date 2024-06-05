@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -38,7 +39,6 @@ namespace AvaloniaMyProject
                 AddResultMessage.Text = "Не все поля заполнены";
                 AddResultMessage.Foreground = brush;
             }
-
 
             //иначе: добавляем товар в переданный список товаров (исходный список)
             Products newProduct = new Products()

@@ -2,12 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
-		Width="700" Height="400"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+		Width="900" Height="600"
 		CanResize="False"
         x:Class="AvaloniaMyProject.ManagerUserWindow"
         x:CompileBindings="False"
 		Title="ManagerUserWindow"
+		WindowStartupLocation="CenterScreen"
 		Background="Transparent">
 
 	<Window.Styles>
@@ -16,6 +17,21 @@
 			<Setter Property="Foreground" Value="Blue"/>
 			<Setter Property="FontFamily" Value="nunito"/>
 			<Setter Property="FontWeight" Value="Bold"/>
+		</Style>
+
+		<Style Selector="TextBlock.txt">
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontSize" Value="15"/>
+		</Style>
+
+		<Style Selector="TextBox.SearchTextBox">
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="Width" Value="150"/>
+			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="BorderBrush" Value="White"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="Margin" Value="10 0 10 10"/>
+			<Setter Property="Height" Value="40"/>
 		</Style>
 	</Window.Styles>
 
@@ -34,108 +50,190 @@
 			</LinearGradientBrush>
 		</Border.Background>
 
-		<Grid ShowGridLines="False"
-			  RowDefinitions="0.6*,*, 5*, 0.5*"
-			  ColumnDefinitions="0.5*, 8*, 2*">
+			<Grid ShowGridLines="True" RowDefinitions="*, 7*, 1.5*, 1.5*"
+				  ColumnDefinitions="2*, 0.5*">
+				<!--Число выведенных записей-->
+				<StackPanel Grid.Row="0" Orientation="Horizontal">
+					<TextBlock Text=""/>
 
-			<StackPanel Grid.Row="0" Orientation="Horizontal"
-						Grid.Column="0"
-						Grid.ColumnSpan="3">
-				<TextBlock x:Name="StatusBlock" Foreground="White" FontSize="18" FontFamily="nunito"
-						   FontWeight="Bold" Margin="35 0 0 0"/>
-				<TextBlock x:Name="NameBlock" Foreground="White" FontSize="18" Margin="10 0 0 0"
-						   FontFamily="nunito" FontWeight="Bold"/>
-			</StackPanel>
+					<TextBlock Name="NameBlock"
+							   FontFamily="nunito"
+							   FontWeight="Bold"
+							   Margin="30 0 20 0 "
+							   Foreground="White"
+							   FontSize="20"/>
+					<TextBlock Name="StatusBlock"
+							   FontFamily="nunito"
+							   FontWeight="Bold"
+							   Foreground="White"
+							   FontSize="20"/>
+				</StackPanel>
 
-			<TextBlock Grid.Row="1"
-					   Grid.Column="1"
-					   Text="Список товаров"
-					   FontFamily="nunito"
-					   Foreground="white"
-					   FontSize="30"
-					   FontWeight="Bold"/>
+				<!--Список товаров-->
+				<ListBox Grid.Row="1" CornerRadius="0"
+						 Margin="10"
+						 Grid.Column="0"
+						 x:Name="listboxProducts"
+						 Background="Transparent"
+						 BorderBrush="White"
+						 BorderThickness="2">	
+					<ListBox.ItemTemplate>
+						<DataTemplate>
 
-			<ListBox Grid.Row="2" CornerRadius="10"
-					 Grid.Column="1"
-					 x:Name="listboxproducts"
-					 ItemsSource="{Binding ProductsList}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<StackPanel Orientation="Vertical"
-									x:Name="Stack1">
-							<TextBlock FontWeight="Bold">
-								Наименование: <Run Text="{Binding Name}" FontWeight="Normal" Foreground="Black"
-												   FontFamily="nunito"/>
-							</TextBlock>
-							<TextBlock FontWeight="Bold">
-								Производитель: <Run Text="{Binding Manufacturer}" FontWeight="Normal" Foreground="Black"
-									FontFamily="nunito"/>
-							</TextBlock>
-							<TextBlock FontWeight="Bold" TextWrapping="Wrap">
-								Описание: <Run Text="{Binding Description}" FontWeight="Normal" Foreground="Black"
-										 FontFamily="nunito"/>
-							</TextBlock>
-							<TextBlock FontWeight="Bold">
-								Остаток: <Run Text="{Binding Quantity}" FontWeight="Normal" Foreground="Black"
-										  FontFamily="nunito"/>
-							</TextBlock>
-							<TextBlock FontWeight="Bold">
-								Стоимость: <Run Text="{Binding Cost}" FontWeight="Normal" Foreground="Black"
-										FontFamily="nunito"/>
-							</TextBlock>
+							<Border BorderBrush="White" BorderThickness="2">
+								<StackPanel Orientation="Vertical"
+										Name="ItemListbox">
+									<!--Окно с товаром-->
+									<!--Товар фото: описание: наличие на складе-->
+									<StackPanel Orientation="Horizontal" Background="{Binding backgrColor}">
+										<Grid ColumnDefinitions="200, 300, 140"
+													ShowGridLines="False">
 
-							<StackPanel Orientation="Horizontal">
-								<Button Content="Удалить" Classes="btn"
-										x:Name="DeleteProduct"
-										IsVisible="{Binding IsAdmin}"
-										Click="DeleteButton_Click"/>
-								
-								<Button Content="Редактировать" Classes="btn"
-										x:Name="EditProduct"
-										IsVisible="{Binding IsAdmin}"
-										Click="EditButton_Click"/>
-							</StackPanel>
+											<StackPanel Grid.Column="0">
+												<Border Margin="10"
+														BorderBrush="White"
+														BorderThickness="3">
+													<!--Изображение-->
+													<TextBlock Text="Тут будет изображение"
+															   Foreground="White"/>
+												</Border>
 
-							<Border Height="10" Background="#0c1b52"
-									Width="700"/>
+											</StackPanel>
+											<!--Описание товара-->
+											<WrapPanel Grid.Column="1"
+														Orientation="Vertical">
+												<!--Наименование товара-->
+												<WrapPanel Orientation="Horizontal">
+													<TextBlock Text="{Binding Name}"
+															   Foreground="White"
+															   TextWrapping="Wrap"
+															   FontWeight="Bold"/>
+												</WrapPanel>
 
-						</StackPanel>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
+												<!--Производитель-->
+												<WrapPanel Orientation="Horizontal">
+													<TextBlock Text="Производитель: "
+																Foreground="White"/>
+													<TextBlock Text="{Binding Manufacturer}"
+															   TextWrapping="Wrap"
+																FontWeight="Bold"
+																Foreground="White"/>
+												</WrapPanel>
 
-			<TextBlock Grid.Row="3"
-					   Grid.Column="1"
-					   Text=""
-					   x:Name="StatusMessage"
-					   Foreground="Red"
-					   TextDecorations="underline"
-					   FontSize="15"/>
-			
-						
-			<Button Grid.Row="2"
-					Grid.Column="2"
-					Content="Добавить"
-					HorizontalAlignment="Center"
-					VerticalAlignment="Top"
-					x:Name="AddProduct"
-					Click="AddProduct_ButtonClick"
-					Margin="10"
-					IsVisible="True"
-					Classes="btn"
-					FontSize="18"/>
+												<!--Описание-->
+												<WrapPanel Orientation="Horizontal">
+													<TextBlock Text="Описание: "
+																	Foreground="White"/>
+													<TextBlock Text="{Binding Description}"
+															   FontWeight="Bold"
+															   TextWrapping="Wrap"
+															   Foreground="White"/>
+												</WrapPanel>
 
-			<Button Grid.Row="2"
-					Grid.Column="2"
-					Content="Выйти"
-					HorizontalAlignment="Left"
-					VerticalAlignment="Bottom"
-					Click="ExitToAuthorization_ButtonClick"
-					IsVisible="True"
-					Margin="15"
-					Classes="btn"
-					FontSize="18"/>
-		</Grid>
-	</Border>
+												<!--Стоимость товара-->
+												<WrapPanel Orientation="Horizontal">
+													<TextBlock Text="Стоимость: "
+															   Foreground="White"/>
+													<TextBlock Text="{Binding Cost}"
+															   TextWrapping="Wrap"
+															   FontWeight="Bold"
+															   Foreground="White"/>
+												</WrapPanel>
+
+											</WrapPanel>
+											
+
+
+										<!--Наличие на складе-->
+											<StackPanel Grid.Column="2" HorizontalAlignment="Right">
+												<TextBlock Text="Остаток на складе"
+																Foreground="White"/>
+												<TextBlock Text="{Binding Quantity}"
+															Foreground="White"/>
+											</StackPanel>
+										
+										</Grid>
+									</StackPanel>
+
+
+									<!--Кнопки Редактировать и Удалить после Grid-->
+									<StackPanel Orientation="Horizontal">
+										<Button Content="Удалить" Classes="btn"
+												x:Name="DeleteProduct"
+												IsVisible="{Binding IsAdmin}"
+												Click="DeleteButton_Click"/>
+
+										<Button Content="Редактировать товар" Classes="btn"
+												x:Name="EditProduct"
+												IsVisible="{Binding IsAdmin}"
+												Click="EditButton_Click"/>
+									</StackPanel>
+
+								</StackPanel>
+							</Border>
+							
+
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+				<!--Копки сортировки, поиска и фильтрации-->
+				<StackPanel Grid.Row="2" Orientation="Horizontal">
+					<!--Меню сортировки-->
+
+					<Menu Height="40" Margin="0 0 0 40">
+						<MenuItem Header="Сортировка"
+								  FontSize="15"
+								  Margin="30 10 0 0"
+								  Background="White"
+								  Foreground="Blue"
+								  FontWeight="Bold"
+								  FontFamily="nunito"
+								  CornerRadius="3">
+							<!--Убывание цены-->
+							<MenuItem Header="По убыванию цены"
+									  Foreground="Blue"
+									  Click="Sort_fromExpensiveToCheap"/>
+							<!--Возрастание цены-->
+							<MenuItem Header="По возрастанию цены"
+									  Foreground="Blue"
+									  Click="Sort_fromCheapToExpensive"/>
+							<!--Сортировка по производителю-->
+							<MenuItem Header="По производителю"
+									  Foreground="Blue"
+									  Click="Sort_Manufacturer"/>
+						</MenuItem>
+					</Menu>
+
+				</StackPanel>
+
+				
+
+				<Separator Background="White" Grid.Row="3"
+						   Margin="30 20 25 70"/>
+
+				<StackPanel Grid.Row="3" Orientation="Horizontal">
+					<Button Content="Добавить товар"
+							Click="AddProduct_ButtonClick"
+							Margin="30 0 0 0"
+							Name="AddProduct"
+							Background="White"
+							FontSize="15"
+							Foreground="Blue"
+							FontWeight="Bold"/>
+
+					<Button Content="Выйти"
+							Click="ExitToAuthorization_ButtonClick"
+							Margin="10 0 0 0"
+							Background="White"
+							FontSize="15"
+							Foreground="Blue"
+							FontWeight="Bold"/>
+				</StackPanel>
+				
+
+			</Grid>
+
+		</Border>
 </Window>
 

@@ -96,6 +96,7 @@
 
 			<Button Grid.Row="3" Grid.Column="1"
 					Content="войти как гость"
+					Click="GuestMode_ButtonClick"
 					HorizontalAlignment="Center"
 					Background="Transparent"
 					Foreground="#ffb500"

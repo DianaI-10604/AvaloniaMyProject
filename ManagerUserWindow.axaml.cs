@@ -1,50 +1,34 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.Media;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Input;
 
 namespace AvaloniaMyProject
 {
     public partial class ManagerUserWindow : Window
     {
         private User _currentUser;
-        Products p = new Products();
 
-        public static ObservableCollection<Products> ProductsList { get; set; } = new ObservableCollection<Products>()
-        {
-            new Products()
-                {
-                    Name = "Galaxy A72",
-                    Manufacturer = "Samsung",
-                    Description = "256GB, Black, Защита от воды (IP67), 2 дня работы⁶ и поддержка супербыстрой зарядки 25 Вт," +
-                    "Безграничный⁴ 6.7''³ sAMOLED экран 90 Гц",
-                    Quantity = 356,
-                    Cost = 33210
-                },
-
-            new Products()
-               {
-                   Name = "Google Pixel 7",
-                   Manufacturer = "Google",
-                   Description = "диагональ экрана: 6.30\", количество основных камер: 2, память: 128 ГБ, 256 ГБ, оперативная память: 8 ГБ, " +
-                   "емкость аккумулятора: 4355 мА⋅ч, разрешение экрана: 2400x1080, частота обновления экрана: 90 Гц",
-                   Quantity = 321,
-                   Cost = 37990
-               }
-        };
+        //список продуктов, который мы будем потом передавать в другой список
+        public static List<Products> ProductsList = new List<Products> { };
 
         public ManagerUserWindow()
         {
             InitializeComponent();
 
-            // Установка контекста данных окна на текущий объект
+            //Установка контекста данных окна на текущий объект
             DataContext = this;
         }
 
-        public ManagerUserWindow(User currentUser)
+        public ManagerUserWindow(User currentUser, List<Products> productslist)
         {
+            ProductsList = productslist;
+
             DataContext = this;
             _currentUser = currentUser; // Инициализация _currentUser
             InitializeComponent(); // Инициализация компонентов
@@ -52,29 +36,74 @@ namespace AvaloniaMyProject
             StatusBlock.Text = "Статус: " + _currentUser.Status;
             NameBlock.Text = "Имя: " + _currentUser.Name;
 
-            // Добавляем элемент в список
+            ProductsList.Add(
+               new Products()
+               {
+                   Name = "Samsung Galaxy A72",
+                   Manufacturer = "Samsung",
+                   Description = "Безграничный экран AMOLED 6.7', 256ГБ, Черный",
+                   Quantity = 34,
+                   Cost = 33990
+               });
 
+            ProductsList.Add(
+               new Products()
+               {
+                   Name = "Poco F5 Pro",
+                   Manufacturer = "Xiaomi",
+                   Description = "256/8ГБ, Белый, AMOLED FHD+, 6.67', 2G/3G/4G (LTE)/5G",
+                   Quantity = 34,
+                   Cost = 33990
+               });
+
+            ProductsList.Add(
+               new Products()
+               {
+                   Name = "ITEL A70",
+                   Manufacturer = "ATEL",
+                   Description = "IPS, 6.6' (1612x720), Unisoc T603, 2G/3G/4G (LTE)",
+                   Quantity = 34,
+                   Cost = 33990
+               });
+
+            //задаем видимость кнопок Редактировать и Удалить для каждого товара в зависимости от статуса
+            foreach (var product in ProductsList)
+            {
+                product.IsAdmin = _currentUser.Status == "Admin";
+            }
+
+            //-------------------------------------------
+            foreach (var product in ProductsList) //добавляем все товары из списка в Listbox
+            {
+                if (product.Quantity == 0)
+                {
+                    Color customColor = Color.FromRgb(102, 98, 103);
+                    SolidColorBrush brush = new SolidColorBrush(customColor);
+                    product.backgrColor = brush;
+                }
+
+                listboxProducts.Items.Add(product);
+            }
+
+            //-------------------------------------------
+
+            // Добавляем элемент в список
             Button addProductButton = this.FindControl<Button>("AddProduct");
             if (_currentUser.Status != "Admin")
             {
                 addProductButton.IsVisible = false;
-                StatusMessage.Text = "Вы можете только просматривать товары";
+            }
+
+            else if (_currentUser.Status == "гость")
+            {
+                NameBlock.Text = "";
             }
             else
             {
                 addProductButton.IsVisible = true;
             }
 
-            this.Opened += ManagerUserWindow_WindowOpened;
-        }
-
-        private void ManagerUserWindow_WindowOpened(object? sender, EventArgs e)
-        {
-            // Установка значения свойства IsAdmin для каждого элемента в ProductsList
-            foreach (var product in ProductsList)
-            {
-                product.IsAdmin = _currentUser.Status == "Admin";
-            }
+           
         }
 
         //удалить товар
@@ -88,6 +117,7 @@ namespace AvaloniaMyProject
 
             // Удаляем элемент из коллекции
             ProductsList.Remove(product);
+            listboxProducts.Items.Remove(product);
         }
 
         //отредактировать товар
@@ -97,12 +127,18 @@ namespace AvaloniaMyProject
 
             Products editProduct = (Products)editButton.DataContext;
 
-            EditProduct prod = new EditProduct(editProduct);
+            //вносим в editproduct параметр того товара, в котором мы нажали на редактирование
+            //а также список товаров отсюда, чтобы список товаров не очистился при переходе на другое окно
+            EditProduct prod = new EditProduct(editProduct, this, ProductsList);
             prod.Show();
         }
+
+        //это запускаем в окне AddProduct, чтобы прямо в этот список добавить товар
         public void UpdateProductsList(Products newProduct)
         {
             ProductsList.Add(newProduct);
+            newProduct.IsAdmin = _currentUser.Status == "Admin";
+            listboxProducts.Items.Add(newProduct);
         }
 
         //добавляем товар в наш список
@@ -111,16 +147,45 @@ namespace AvaloniaMyProject
             // Передаем ссылку на исходный список товаров в окно добавления товара
             AddProduct ap = new AddProduct(this);
             ap.Show();
-
         }
 
         //возвращаемся на окно авторизации
         private void ExitToAuthorization_ButtonClick(object sender, RoutedEventArgs e)
         {
-            MainWindow auth = new MainWindow();
+            MainWindow auth = new MainWindow(ProductsList);
             auth.Show();
 
             this.Close();
         }
+
+        private void Sort_fromExpensiveToCheap(object sender, RoutedEventArgs e)
+        {
+            List<Products> SortedList = ProductsList.OrderByDescending(item => item.Cost).ToList();
+            UpdateListBox(SortedList);
+        }
+
+        private void Sort_fromCheapToExpensive(object sender, RoutedEventArgs e)
+        {
+            List<Products> SortedList = ProductsList.OrderBy(item => item.Cost).ToList();
+            UpdateListBox(SortedList);
+        }
+
+        private void Sort_Manufacturer(object sender, RoutedEventArgs e)
+        {
+            List<Products> SortedList = ProductsList.OrderBy(item => item.Manufacturer).ToList();
+            UpdateListBox(SortedList);
+        }
+
+        private void UpdateListBox(List<Products> ListToAdd) //Обновляем список товаров
+        {
+            listboxProducts.Items.Clear();
+
+            foreach (var item in ListToAdd)
+            {
+                listboxProducts.Items.Add(item);
+            }
+        }
+
+        //методы поиска
     }
 }

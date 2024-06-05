@@ -13,7 +13,7 @@ namespace AvaloniaMyProject
         public string Password { get; set; }
         public string Status { get; set; }
 
-        public List<User> users = new List<User>(); //тут будут все пользователи и их статусы
+        //public List<User> users = new List<User>(); //тут будут все пользователи и их статусы
 
         //Создать пользователя, который будет админом при каждом запуске программы
     }
