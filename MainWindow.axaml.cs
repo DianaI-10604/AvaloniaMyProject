@@ -9,9 +9,6 @@ namespace AvaloniaMyProject
 {
     public partial class MainWindow : Window
     {
-        User user = new User();
-        Products p = new Products();
-
         //private Products _product;
         public static List<Products> AllProducts = new List<Products>(); //здесь будем держать все значения товаров, чтобы они не очищались
 
@@ -65,7 +62,6 @@ namespace AvaloniaMyProject
                     ManagerUserWindow muw = new ManagerUserWindow(usercheck, AllProducts);
                     muw.Show();
                     this.Close();
-                    
                 }
                 else
                 {

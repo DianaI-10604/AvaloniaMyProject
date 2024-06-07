@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -71,6 +72,17 @@ namespace AvaloniaMyProject
             //при выполнении кода выгл€дит так, будто мы не очищаем список, а просто обновл€ем отдельные атрибуты
             foreach (var product in EditProductsList)
             {
+                if (product.Quantity == 0)
+                {
+                    Color customColor = Color.FromRgb(102, 98, 103);
+                    SolidColorBrush brush = new SolidColorBrush(customColor);
+                    product.backgrColor = brush;
+                }
+                else
+                {
+                    SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
+                    product.backgrColor = brush;
+                }
                 _managerwindow.listboxProducts.Items.Add(product);
             }
 

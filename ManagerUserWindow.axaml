@@ -43,15 +43,14 @@
 		<Border.Background>
 			<LinearGradientBrush StartPoint="75%, 100%"
 								 EndPoint="0, 1">
-				<GradientStop Color="#0c1b52"
+				<GradientStop Color="#2708cb"
 							  Offset="0.3"/>
-				<GradientStop Color="#0d1680"
+				<GradientStop Color="#391ae1"
 							  Offset="0.8"/>
 			</LinearGradientBrush>
 		</Border.Background>
 
-			<Grid ShowGridLines="True" RowDefinitions="*, 7*, 1.5*, 1.5*"
-				  ColumnDefinitions="2*, 0.5*">
+			<Grid ShowGridLines="True" RowDefinitions="*, 7*, 1.5*, 1.5*">
 				<!--Число выведенных записей-->
 				<StackPanel Grid.Row="0" Orientation="Horizontal">
 					<TextBlock Text=""/>
@@ -167,12 +166,14 @@
 												x:Name="EditProduct"
 												IsVisible="{Binding IsAdmin}"
 												Click="EditButton_Click"/>
-									</StackPanel>
 
+										<!--Кнопка добавления в корзину-->
+										<Button Content="Добавить в корзину" Classes="btn"
+												IsVisible="{Binding IsAdmin}"
+												Click="AddToBacket_Button_Click"/>
+									</StackPanel>
 								</StackPanel>
 							</Border>
-							
-
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
@@ -204,6 +205,13 @@
 									  Click="Sort_Manufacturer"/>
 						</MenuItem>
 					</Menu>
+					
+					<Button Margin="10 0 0 26"
+							Content="Перейти в корзину"
+							Background="White"
+							FontWeight="Bold"
+							Click="GoToBasket_Button_Click"
+							Foreground="Blue"/>
 
 				</StackPanel>
 

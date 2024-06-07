@@ -1,0 +1,139 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+		Width="600" Height="450"
+        x:Class="AvaloniaMyProject.Basket"
+		x:CompileBindings="False"
+		CanResize="False"
+		WindowStartupLocation="CenterScreen"
+		Background="Transparent"
+        Title="Basket">
+	<Border Background="#08021c">
+		<!--Установили градиент окна-->
+		<Border.Background>
+			<LinearGradientBrush StartPoint="75%, 100%"
+								 EndPoint="0, 1">
+				<GradientStop Color="#2708cb"
+							  Offset="0.3"/>
+				<GradientStop Color="#391ae1"
+							  Offset="0.8"/>
+			</LinearGradientBrush>
+		</Border.Background>
+
+
+		<Grid ShowGridLines="True"
+			  RowDefinitions="2*, 10*, *">
+			
+			<TextBlock Text="Корзина"
+					   Grid.Row="0"
+					   Foreground="White"
+					   FontSize="30"
+					   Margin="10"/>
+			<!--Список товаров-->
+			<ListBox Grid.Row="1" CornerRadius="0"
+					 Margin="10"
+					 Grid.Column="0"
+					 x:Name="BasketListbox"
+					 Background="Transparent"
+					 BorderBrush="White"
+					 BorderThickness="2">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+
+						<Border BorderBrush="White" BorderThickness="2">
+							<StackPanel Orientation="Vertical"
+									Name="ItemListbox">
+								<!--Окно с товаром-->
+								<!--Товар фото: описание: наличие на складе-->
+								<StackPanel Orientation="Horizontal" Background="{Binding backgrColor}">
+									<Grid ColumnDefinitions="150, 250, 140"
+												ShowGridLines="False">
+
+										<StackPanel Grid.Column="0">
+											<Border Margin="10"
+													BorderBrush="White"
+													BorderThickness="3">
+												<!--Изображение-->
+												<TextBlock Text="Тут будет изображение"
+														   Foreground="White"/>
+											</Border>
+
+										</StackPanel>
+										<!--Описание товара-->
+										<WrapPanel Grid.Column="1"
+													Orientation="Vertical">
+											<!--Наименование товара-->
+											<WrapPanel Orientation="Horizontal">
+												<TextBlock Text="{Binding Name}"
+														   Foreground="White"
+														   TextWrapping="Wrap"
+														   FontWeight="Bold"/>
+											</WrapPanel>
+
+											<!--Производитель-->
+											<WrapPanel Orientation="Horizontal">
+												<TextBlock Text="Производитель: "
+															Foreground="White"/>
+												<TextBlock Text="{Binding Manufacturer}"
+														   TextWrapping="Wrap"
+															FontWeight="Bold"
+															Foreground="White"/>
+											</WrapPanel>
+
+											<!--Описание-->
+											<WrapPanel Orientation="Horizontal">
+												<TextBlock Text="Описание: "
+																Foreground="White"/>
+												<TextBlock Text="{Binding Description}"
+														   FontWeight="Bold"
+														   TextWrapping="Wrap"
+														   Foreground="White"/>
+											</WrapPanel>
+
+											<!--Стоимость товара-->
+											<WrapPanel Orientation="Horizontal">
+												<TextBlock Text="Стоимость: "
+														   Foreground="White"/>
+												<TextBlock Text="{Binding Cost}"
+														   TextWrapping="Wrap"
+														   FontWeight="Bold"
+														   Foreground="White"/>
+											</WrapPanel>
+
+										</WrapPanel>
+
+										<!--Наличие на складе-->
+										<StackPanel Grid.Column="2" HorizontalAlignment="Right">
+											<TextBlock Text="Остаток на складе"
+															Foreground="White"/>
+											<TextBlock Text="{Binding Quantity}"
+														Foreground="White"/>
+										</StackPanel>
+										
+									</Grid>
+								</StackPanel>
+
+								<StackPanel>
+									<!--Добавить панель изменения кол-ва товара на складе-->
+									<!--А также добавить проверку, есть ли данный товар в корзине-->
+									
+									<Button Content="Удалить" Classes="btn"
+											x:Name="DeleteProduct"
+											Click=""
+											Background="White"
+											Foreground="Blue"
+											CornerRadius="5"/>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+
+
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</Grid>
+		
+	</Border>
+</Window>

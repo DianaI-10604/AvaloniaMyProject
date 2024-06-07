@@ -47,10 +47,10 @@
 		<Border.Background>
 			<LinearGradientBrush StartPoint="75%, 100%"
 								 EndPoint="0, 1">
-				<GradientStop Color="#060730"
-							  Offset="0.2"/>
-				<GradientStop Color="#0d1680"
-							  Offset="0.9"/>
+				<GradientStop Color="#2708cb"
+							  Offset="0.3"/>
+				<GradientStop Color="#391ae1"
+							  Offset="0.8"/>
 			</LinearGradientBrush>
 		</Border.Background>
 		<Grid ShowGridLines="False" RowDefinitions="*, *, 3*, *, 0.5*" ColumnDefinitions="*, 10*, *">

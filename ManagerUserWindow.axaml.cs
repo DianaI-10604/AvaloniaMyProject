@@ -17,6 +17,9 @@ namespace AvaloniaMyProject
         //список продуктов, который мы будем потом передавать в другой список
         public static List<Products> ProductsList = new List<Products> { };
 
+        //список товаров, которые в корзине
+        public List<Products> ProductToBasket = new List<Products>() { };
+
         public ManagerUserWindow()
         {
             InitializeComponent();
@@ -101,9 +104,7 @@ namespace AvaloniaMyProject
             else
             {
                 addProductButton.IsVisible = true;
-            }
-
-           
+            } 
         }
 
         //удалить товар
@@ -115,9 +116,22 @@ namespace AvaloniaMyProject
             // Получаем контекст данных этой кнопки (т.е. элемент Products, к которому привязана кнопка)
             Products product = (Products)deleteButton.DataContext;
 
-            // Удаляем элемент из коллекции
-            ProductsList.Remove(product);
-            listboxProducts.Items.Remove(product);
+            //если удаляемый товар есть в корзине, То выводим сообщение 
+            if (ProductToBasket.Contains(product))
+            {
+                DeleteProductMessageBox message = new DeleteProductMessageBox();
+
+                message.firstmessage.Text = "Вы не можете удалить товар, ";
+                message.secondmessage.Text = "который есть в корзине";
+
+                message.Show();
+            }
+            else
+            {
+                //если нет в корзине, То удаляем из списка товаров
+                ProductsList.Remove(product);
+                listboxProducts.Items.Remove(product);
+            }
         }
 
         //отредактировать товар
@@ -138,6 +152,18 @@ namespace AvaloniaMyProject
         {
             ProductsList.Add(newProduct);
             newProduct.IsAdmin = _currentUser.Status == "Admin";
+
+            if (newProduct.Quantity == 0)
+            {
+                Color customColor = Color.FromRgb(102, 98, 103);
+                SolidColorBrush brush = new SolidColorBrush(customColor);
+                newProduct.backgrColor = brush;
+            }
+            else
+            {
+                SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
+                newProduct.backgrColor = brush;
+            }
             listboxProducts.Items.Add(newProduct);
         }
 
@@ -186,6 +212,39 @@ namespace AvaloniaMyProject
             }
         }
 
-        //методы поиска
+        private void AddToBacket_Button_Click(object sender, RoutedEventArgs e)
+        {
+            // Получаем кнопку, на которую было нажатие
+            Button addtobasket = (Button)sender;
+
+            // Получаем контекст данных этой кнопки (т.е. элемент Products, к которому привязана кнопка)
+            Products product = (Products)addtobasket.DataContext;
+
+            //проверка на добавление 
+            if (product.Quantity == 0)
+            {
+                DeleteProductMessageBox message = new DeleteProductMessageBox();
+                message.firstmessage.Text = "Вы не можете добавить в корзину товар,";
+                message.secondmessage.Text = "которого нет в наличии ";
+
+                message.Show();
+            }
+
+            else
+            {
+                ProductToBasket.Add(product);
+
+                Basket basket = new Basket(ProductToBasket);
+                basket.Show();
+            }  
+
+        }
+
+        //Перейти в корзину
+        private void GoToBasket_Button_Click(Object sender, RoutedEventArgs e)
+        {
+            Basket basket = new Basket(ProductToBasket);
+            basket.Show();
+        }
     }
 }
