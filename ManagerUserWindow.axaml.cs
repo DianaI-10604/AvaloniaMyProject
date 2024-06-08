@@ -18,7 +18,7 @@ namespace AvaloniaMyProject
         public static List<Products> ProductsList = new List<Products> { };
 
         //список товаров, которые в корзине
-        public List<Products> ProductToBasket = new List<Products>() { };
+        //public List<Products> ProductToBasket = new List<Products>() { };
 
         public ManagerUserWindow()
         {
@@ -45,7 +45,7 @@ namespace AvaloniaMyProject
                    Name = "Samsung Galaxy A72",
                    Manufacturer = "Samsung",
                    Description = "Безграничный экран AMOLED 6.7', 256ГБ, Черный",
-                   Quantity = 34,
+                   Quantity = 5,
                    Cost = 33990
                });
 
@@ -55,7 +55,7 @@ namespace AvaloniaMyProject
                    Name = "Poco F5 Pro",
                    Manufacturer = "Xiaomi",
                    Description = "256/8ГБ, Белый, AMOLED FHD+, 6.67', 2G/3G/4G (LTE)/5G",
-                   Quantity = 34,
+                   Quantity = 2,
                    Cost = 33990
                });
 
@@ -117,7 +117,7 @@ namespace AvaloniaMyProject
             Products product = (Products)deleteButton.DataContext;
 
             //если удаляемый товар есть в корзине, То выводим сообщение 
-            if (ProductToBasket.Contains(product))
+            if (_currentUser.UserBasket.Contains(product))
             {
                 DeleteProductMessageBox message = new DeleteProductMessageBox();
 
@@ -232,18 +232,16 @@ namespace AvaloniaMyProject
 
             else
             {
-                ProductToBasket.Add(product);
+                _currentUser.UserBasket.Add(product);
 
-                Basket basket = new Basket(ProductToBasket);
-                basket.Show();
+                //Basket basket = new Basket(_currentUser);
             }  
-
         }
 
         //Перейти в корзину
-        private void GoToBasket_Button_Click(Object sender, RoutedEventArgs e)
+        private void GoToBasket_Button_Click(object sender, RoutedEventArgs e)
         {
-            Basket basket = new Basket(ProductToBasket);
+            Basket basket = new Basket(_currentUser);
             basket.Show();
         }
     }

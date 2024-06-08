@@ -110,12 +110,15 @@
 															Foreground="White"/>
 											<TextBlock Text="{Binding Quantity}"
 														Foreground="White"/>
-										</StackPanel>
-										
+										</StackPanel>								
 									</Grid>
+
+									<!--Панель изменения кол-ва товара-->
 								</StackPanel>
 
-								<StackPanel>
+								
+
+								<StackPanel Orientation="Horizontal">
 									<!--Добавить панель изменения кол-ва товара на складе-->
 									<!--А также добавить проверку, есть ли данный товар в корзине-->
 									
@@ -125,6 +128,21 @@
 											Background="White"
 											Foreground="Blue"
 											CornerRadius="5"/>
+
+									<StackPanel Orientation="Horizontal" Margin="10 0 0 0">
+										<Button Content="-"
+												CornerRadius="5 0 0 5"
+												Background="White"
+												Click="MinusProductCount_ButtonClick"/>
+										<Border Background="White">
+											<TextBlock Text="{Binding Quantity}"
+													   VerticalAlignment="Center"/>
+										</Border>
+										<Button Content="+"
+												CornerRadius="0 5 5 0"
+												Click="PlusProductCount_ButtonClick"
+												Background="White"/>
+									</StackPanel>
 								</StackPanel>
 							</StackPanel>
 						</Border>
