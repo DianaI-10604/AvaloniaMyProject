@@ -9,7 +9,6 @@ namespace AvaloniaMyProject;
 
 public partial class Basket : Window
 {
-    //private List<Products> _thisBasket = new List<Products>();
     private User _currentUser;
     public Basket()
     {
@@ -27,19 +26,20 @@ public partial class Basket : Window
             BasketListbox.Items.Add(item);
         }
     }
+
     private void MinusProductCount_ButtonClick(object sender, RoutedEventArgs e)
     {
         Button changeCount = (Button)sender;
         Products product = (Products)changeCount.DataContext;
 
-        if (product.Quantity - 1 == 0)
+        if (product.BasketProductQuantity - 1 == 0)
         {
             _currentUser.UserBasket.Remove(product);
             BasketListbox.Items.Remove(product);
         }
         else
         {
-            product.Quantity -= 1;
+            product.BasketProductQuantity -= 1;
         }
     }
 
@@ -48,7 +48,31 @@ public partial class Basket : Window
         Button changeCount = (Button)sender;
         Products product = (Products)changeCount.DataContext;
 
-        product.Quantity += 1;
+        //если пытаемся положитьо больше чем есть
+        if ((product.BasketProductQuantity + 1) > product.Quantity)
+        {
+            DeleteProductMessageBox message = new DeleteProductMessageBox();
+            message.firstmessage.Text = "Вы не можете положить в корзину больше, чем есть";
+            message.secondmessage.Text = "на складе";
+            message.Show();
+        }
+        else
+        {
+            product.BasketProductQuantity += 1;
+        }
     }
 
+    private void DeleteProductFromBasket_ButtonClick(object sender, RoutedEventArgs e)
+    {
+        Button delete = (Button)sender;
+        Products producttodelete = (Products)delete.DataContext;
+
+        _currentUser.UserBasket.Remove(producttodelete);
+
+        BasketListbox.Items.Clear();
+        foreach (var product in _currentUser.UserBasket)
+        {
+            BasketListbox.Items.Add(product);
+        }
+    }
 }

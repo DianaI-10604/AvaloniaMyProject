@@ -116,21 +116,55 @@ namespace AvaloniaMyProject
             // Получаем контекст данных этой кнопки (т.е. элемент Products, к которому привязана кнопка)
             Products product = (Products)deleteButton.DataContext;
 
-            //если удаляемый товар есть в корзине, То выводим сообщение 
-            if (_currentUser.UserBasket.Contains(product))
+            bool IsDelete = true;
+            foreach (var user in MainWindow.Users)
             {
-                DeleteProductMessageBox message = new DeleteProductMessageBox();
+                if (user.UserBasket.Contains(product))
+                {
+                    IsDelete = false;
 
-                message.firstmessage.Text = "Вы не можете удалить товар, ";
-                message.secondmessage.Text = "который есть в корзине";
+                    DeleteProductMessageBox message = new DeleteProductMessageBox();
 
-                message.Show();
+                    message.firstmessage.Text = "Вы не можете удалить товар, ";
+                    message.secondmessage.Text = "который есть в корзине";
+
+                    message.Show();
+                }
+
+                //else
+                //{
+                //    //если нет в корзине, То удаляем из списка товаров
+                //    ProductsList.Remove(product);
+                //    listboxProducts.Items.Remove(product);
+                //}
+
             }
-            else
+
+            DeleteProductCheck(IsDelete, product);
+
+            //если удаляемый товар есть в корзине, То выводим сообщение 
+            //if (_currentUser.UserBasket.Contains(product))
+            //{
+            //    DeleteProductMessageBox message = new DeleteProductMessageBox();
+
+            //    message.firstmessage.Text = "Вы не можете удалить товар, ";
+            //    message.secondmessage.Text = "который есть в корзине";
+
+            //    message.Show();
+            //}
+            //else
+            //{
+            //    //если нет в корзине, То удаляем из списка товаров
+            //    ProductsList.Remove(product);
+            //    listboxProducts.Items.Remove(product);
+            //}
+        }
+
+        private void DeleteProductCheck(bool IsDelete, Products producttodelete)
+        {
+            if (IsDelete == true)
             {
-                //если нет в корзине, То удаляем из списка товаров
-                ProductsList.Remove(product);
-                listboxProducts.Items.Remove(product);
+                listboxProducts.Items.Remove(producttodelete);
             }
         }
 

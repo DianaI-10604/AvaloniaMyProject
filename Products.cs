@@ -16,6 +16,17 @@ namespace AvaloniaMyProject
         private string _description;
         private int _quantity;  //остаток на складе
         private double _cost;
+        private int basketproductquantity = 1;
+
+        public int BasketProductQuantity
+        {
+            get { return basketproductquantity; }
+            set
+            {
+                basketproductquantity = value;
+                OnPropertyChanged("BasketProductQuantity");
+            }
+        }
 
         public string Name
         {

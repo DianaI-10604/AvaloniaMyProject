@@ -106,15 +106,19 @@
 
 										<!--Наличие на складе-->
 										<StackPanel Grid.Column="2" HorizontalAlignment="Right">
-											<TextBlock Text="Остаток на складе"
+											<TextBlock Text="В корзине"
 															Foreground="White"/>
-											<TextBlock Text="{Binding Quantity}"
+											<TextBlock Text="{Binding BasketProductQuantity}"
 														Foreground="White"/>
 										</StackPanel>								
 									</Grid>
-
-									<!--Панель изменения кол-ва товара-->
+									
 								</StackPanel>
+								
+								<Button Content="Длбавить в корзину"
+											Background="White"
+											Foreground="Blue"
+											CornerRadius="5"/>
 
 								
 
@@ -124,7 +128,7 @@
 									
 									<Button Content="Удалить" Classes="btn"
 											x:Name="DeleteProduct"
-											Click=""
+											Click="DeleteProductFromBasket_ButtonClick"
 											Background="White"
 											Foreground="Blue"
 											CornerRadius="5"/>
@@ -135,7 +139,7 @@
 												Background="White"
 												Click="MinusProductCount_ButtonClick"/>
 										<Border Background="White">
-											<TextBlock Text="{Binding Quantity}"
+											<TextBlock Text="{Binding BasketProductQuantity}"
 													   VerticalAlignment="Center"/>
 										</Border>
 										<Button Content="+"
