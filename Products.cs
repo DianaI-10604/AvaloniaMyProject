@@ -91,6 +91,8 @@ namespace AvaloniaMyProject
         }
         public Products() { }
 
+        public static List<Products> ProductsList { get; set; } = new List<Products> { };
+
         public SolidColorBrush backgrColor { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;

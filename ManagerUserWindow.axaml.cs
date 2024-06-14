@@ -18,7 +18,7 @@ namespace AvaloniaMyProject
         public static ObservableCollection<Products> ProductsToShow { get; set; } = new ObservableCollection<Products>();
 
         //список продуктов, который мы будем потом передавать в другой список
-        public static List<Products> ProductsList { get; set; } = new List<Products> {};
+        //public static List<Products> ProductsList { get; set; } = new List<Products> {};
         private string _searchText = string.Empty;
         private string _sortCriteria = "Default";
         private string _selectedManufacturer = "Все производители";
@@ -26,7 +26,6 @@ namespace AvaloniaMyProject
         public ManagerUserWindow()
         {
             InitializeComponent();
-
             //Установка контекста данных окна на текущий объект
             DataContext = this;
         }
@@ -38,7 +37,7 @@ namespace AvaloniaMyProject
             DataContext = this;
             _currentUser = currentUser; // Инициализация _currentUser
 
-            UpdateListBox(ProductsList);
+            
             InitializeComponent(); // Инициализация компонентов
 
             var comboBox = this.FindControl<ComboBox>("ManufacturersComboBox");
@@ -52,13 +51,13 @@ namespace AvaloniaMyProject
             NameBlock.Text = "Имя: " + _currentUser.Name;
 
             //задаем видимость кнопок Редактировать и Удалить для каждого товара в зависимости от статуса
-            foreach (var product in ProductsList)
+            foreach (var product in Products.ProductsList)
             {
                 product.IsAdmin = _currentUser.Status == "Admin";
             }
 
             //-------------------------------------------
-            foreach (var product in ProductsList) //добавляем все товары из списка в Listbox
+            foreach (var product in Products.ProductsList) //добавляем все товары из списка в Listbox
             {
                 ProductsToShow.Clear();
                 if (product.Quantity == 0)
@@ -125,22 +124,6 @@ namespace AvaloniaMyProject
 
             DeleteProductCheck(IsDelete, product);
 
-            //если удаляемый товар есть в корзине, То выводим сообщение 
-            //if (_currentUser.UserBasket.Contains(product))
-            //{
-            //    DeleteProductMessageBox message = new DeleteProductMessageBox();
-
-            //    message.firstmessage.Text = "Вы не можете удалить товар, ";
-            //    message.secondmessage.Text = "который есть в корзине";
-
-            //    message.Show();
-            //}
-            //else
-            //{
-            //    //если нет в корзине, То удаляем из списка товаров
-            //    ProductsList.Remove(product);
-            //    listboxProducts.Items.Remove(product);
-            //}
         }
 
         //обновляем поиск товаров
@@ -200,18 +183,13 @@ namespace AvaloniaMyProject
             }
         }
 
-        private void ChooseManufacturer(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
-
         private void DeleteProductCheck(bool isDelete, Products productToDelete)
         {
             if (isDelete)
             {
-                ProductsList.Remove(productToDelete);
+                Products.ProductsList.Remove(productToDelete);
 
-                UpdateListBox(ProductsList);
+                UpdateListBox(Products.ProductsList);
             }
         }
 
@@ -224,7 +202,7 @@ namespace AvaloniaMyProject
 
             //вносим в editproduct параметр того товара, в котором мы нажали на редактирование
             //а также список товаров отсюда, чтобы список товаров не очистился при переходе на другое окно
-            EditProduct prod = new EditProduct(editProduct, this, ProductsList);
+            EditProduct prod = new EditProduct(editProduct, this, Products.ProductsList);
             prod.Show();
         }
 
@@ -252,9 +230,9 @@ namespace AvaloniaMyProject
                 _comboBox.Items.Add(new ComboBoxItem { Content = newProduct.Manufacturer });
             }
 
-            ProductsList.Add(newProduct);
+            Products.ProductsList.Add(newProduct);
             
-            UpdateListBox(ProductsList);
+            UpdateListBox(Products.ProductsList);
         }
 
         //добавляем товар в наш список
@@ -268,7 +246,7 @@ namespace AvaloniaMyProject
         //возвращаемся на окно авторизации
         private void ExitToAuthorization_ButtonClick(object sender, RoutedEventArgs e)
         {
-            MainWindow auth = new MainWindow(/*ProductsList*/);
+            MainWindow auth = new MainWindow();
             auth.Show();
 
             this.Close();
@@ -276,7 +254,7 @@ namespace AvaloniaMyProject
 
         private void ApplyFiltersAndSort()
         {
-            var filteredProducts = ProductsList.Where(product =>
+            var filteredProducts = Products.ProductsList.Where(product =>
                 (_selectedManufacturer == "Все производители" || product.Manufacturer == _selectedManufacturer) &&
                 (string.IsNullOrWhiteSpace(_searchText) ||
                     product.Name.ToLower().Contains(_searchText) ||
