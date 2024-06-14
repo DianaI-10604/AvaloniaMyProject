@@ -13,12 +13,15 @@ namespace AvaloniaMyProject
     public partial class ManagerUserWindow : Window
     {
         private User _currentUser;
+        private ComboBox _comboBox;
+
+        public static ObservableCollection<Products> ProductsToShow { get; set; } = new ObservableCollection<Products>();
 
         //список продуктов, который мы будем потом передавать в другой список
-        public static List<Products> ProductsList = new List<Products> { };
-
-        //список товаров, которые в корзине
-        //public List<Products> ProductToBasket = new List<Products>() { };
+        public static List<Products> ProductsList { get; set; } = new List<Products> {};
+        private string _searchText = string.Empty;
+        private string _sortCriteria = "Default";
+        private string _selectedManufacturer = "Все производители";
 
         public ManagerUserWindow()
         {
@@ -28,46 +31,25 @@ namespace AvaloniaMyProject
             DataContext = this;
         }
 
-        public ManagerUserWindow(User currentUser, List<Products> productslist)
+        public ManagerUserWindow(User currentUser /*List<Products> productslist*/)
         {
-            ProductsList = productslist;
+            //ProductsList = productslist; 
 
             DataContext = this;
             _currentUser = currentUser; // Инициализация _currentUser
+
+            UpdateListBox(ProductsList);
             InitializeComponent(); // Инициализация компонентов
+
+            var comboBox = this.FindControl<ComboBox>("ManufacturersComboBox");
+            ApplyFiltersAndSort();
+
+            // Устанавливаем начальный выбранный элемент
+            _comboBox = comboBox;
+            _comboBox.SelectedIndex = 0;
 
             StatusBlock.Text = "Статус: " + _currentUser.Status;
             NameBlock.Text = "Имя: " + _currentUser.Name;
-
-            ProductsList.Add(
-               new Products()
-               {
-                   Name = "Samsung Galaxy A72",
-                   Manufacturer = "Samsung",
-                   Description = "Безграничный экран AMOLED 6.7', 256ГБ, Черный",
-                   Quantity = 5,
-                   Cost = 33990
-               });
-
-            ProductsList.Add(
-               new Products()
-               {
-                   Name = "Poco F5 Pro",
-                   Manufacturer = "Xiaomi",
-                   Description = "256/8ГБ, Белый, AMOLED FHD+, 6.67', 2G/3G/4G (LTE)/5G",
-                   Quantity = 2,
-                   Cost = 33990
-               });
-
-            ProductsList.Add(
-               new Products()
-               {
-                   Name = "ITEL A70",
-                   Manufacturer = "ATEL",
-                   Description = "IPS, 6.6' (1612x720), Unisoc T603, 2G/3G/4G (LTE)",
-                   Quantity = 34,
-                   Cost = 33990
-               });
 
             //задаем видимость кнопок Редактировать и Удалить для каждого товара в зависимости от статуса
             foreach (var product in ProductsList)
@@ -78,6 +60,7 @@ namespace AvaloniaMyProject
             //-------------------------------------------
             foreach (var product in ProductsList) //добавляем все товары из списка в Listbox
             {
+                ProductsToShow.Clear();
                 if (product.Quantity == 0)
                 {
                     Color customColor = Color.FromRgb(102, 98, 103);
@@ -85,7 +68,7 @@ namespace AvaloniaMyProject
                     product.backgrColor = brush;
                 }
 
-                listboxProducts.Items.Add(product);
+                ProductsToShow.Add(product);
             }
 
             //-------------------------------------------
@@ -160,11 +143,75 @@ namespace AvaloniaMyProject
             //}
         }
 
-        private void DeleteProductCheck(bool IsDelete, Products producttodelete)
+        //обновляем поиск товаров
+        //private void SearchTextBox_SelectionChanged(object sender, KeyEventArgs e)
+        //{
+        //    string searchText = Search.Text.ToLower();
+        //    UpdateListSearch(searchText, ProductsList);
+        //}
+
+        //private void ChooseManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    ComboBox comboBox = (ComboBox)sender;
+
+        //    if (comboBox.SelectedItem != null)
+        //    {
+        //        // Получаем выбранный элемент ComboBox
+        //        var selectedItem = comboBox.SelectedItem;
+
+        //        // Проверяем, является ли выбранный элемент ComboBoxItem
+        //        if (selectedItem is ComboBoxItem comboBoxItem)
+        //        {
+        //            // Извлекаем текст из содержимого ComboBoxItem
+        //            string selectedManufacturer = comboBoxItem.Content as string;
+
+        //            if (selectedManufacturer != null)
+        //            {
+        //                if (selectedManufacturer == "Все производители")
+        //                {
+        //                    UpdateListBox(ProductsList);
+        //                }
+        //                else
+        //                {
+        //                    var chosenProducts = ProductsList.Where(product => product.Manufacturer == selectedManufacturer).ToList();
+        //                    UpdateListBox(chosenProducts);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        private void UpdateListSearch(string searchText, List<Products> ProductsList)
         {
-            if (IsDelete == true)
+            string[] searchWords = searchText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            List<Products> filteredProducts =  new List<Products>();
+
+            if (searchWords != null || searchWords.Length != 0)
             {
-                listboxProducts.Items.Remove(producttodelete);
+                filteredProducts = ProductsList.Where(product =>
+                string.IsNullOrWhiteSpace(searchText) ||
+                searchWords.Any(word =>
+                    product.Name.ToLower().Contains(word) ||
+                    product.Manufacturer.ToLower().Contains(word) ||
+                    product.Description.ToLower().Contains(word)
+                )).ToList();
+
+                UpdateListBox(filteredProducts);
+            }
+        }
+
+        private void ChooseManufacturer(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        private void DeleteProductCheck(bool isDelete, Products productToDelete)
+        {
+            if (isDelete)
+            {
+                ProductsList.Remove(productToDelete);
+
+                UpdateListBox(ProductsList);
             }
         }
 
@@ -182,9 +229,9 @@ namespace AvaloniaMyProject
         }
 
         //это запускаем в окне AddProduct, чтобы прямо в этот список добавить товар
-        public void UpdateProductsList(Products newProduct)
+        public async void UpdateProductsList(Products newProduct)
         {
-            ProductsList.Add(newProduct);
+            //ProductsList.Add(newProduct);
             newProduct.IsAdmin = _currentUser.Status == "Admin";
 
             if (newProduct.Quantity == 0)
@@ -198,7 +245,16 @@ namespace AvaloniaMyProject
                 SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
                 newProduct.backgrColor = brush;
             }
-            listboxProducts.Items.Add(newProduct);
+
+            //ДОБАВИЛИ ПРОИЗВОДИТЕШЛЯ В СПИСОК
+            if (!_comboBox.Items.Cast<ComboBoxItem>().Any(item => (string)item.Content == newProduct.Manufacturer))
+            {
+                _comboBox.Items.Add(new ComboBoxItem { Content = newProduct.Manufacturer });
+            }
+
+            ProductsList.Add(newProduct);
+            
+            UpdateListBox(ProductsList);
         }
 
         //добавляем товар в наш список
@@ -212,37 +268,66 @@ namespace AvaloniaMyProject
         //возвращаемся на окно авторизации
         private void ExitToAuthorization_ButtonClick(object sender, RoutedEventArgs e)
         {
-            MainWindow auth = new MainWindow(ProductsList);
+            MainWindow auth = new MainWindow(/*ProductsList*/);
             auth.Show();
 
             this.Close();
         }
 
-        private void Sort_fromExpensiveToCheap(object sender, RoutedEventArgs e)
+        private void ApplyFiltersAndSort()
         {
-            List<Products> SortedList = ProductsList.OrderByDescending(item => item.Cost).ToList();
-            UpdateListBox(SortedList);
+            var filteredProducts = ProductsList.Where(product =>
+                (_selectedManufacturer == "Все производители" || product.Manufacturer == _selectedManufacturer) &&
+                (string.IsNullOrWhiteSpace(_searchText) ||
+                    product.Name.ToLower().Contains(_searchText) ||
+                    product.Manufacturer.ToLower().Contains(_searchText) ||
+                    product.Description.ToLower().Contains(_searchText))
+            );
+
+            List<Products> sortedProducts;
+            switch (_sortCriteria)
+            {
+                case "CostDesc":
+                    sortedProducts = filteredProducts.OrderByDescending(item => item.Cost).ToList();
+                    break;
+                case "CostAsc":
+                    sortedProducts = filteredProducts.OrderBy(item => item.Cost).ToList();
+                    break;
+                case "Manufacturer":
+                    sortedProducts = filteredProducts.OrderBy(item => item.Manufacturer).ToList();
+                    break;
+                default:
+                    sortedProducts = filteredProducts.ToList();
+                    break;
+            }
+
+            UpdateListBox(sortedProducts);
         }
 
-        private void Sort_fromCheapToExpensive(object sender, RoutedEventArgs e)
-        {
-            List<Products> SortedList = ProductsList.OrderBy(item => item.Cost).ToList();
-            UpdateListBox(SortedList);
-        }
+        //private void Sort_fromExpensiveToCheap(object sender, RoutedEventArgs e)
+        //{
+        //    List<Products> SortedList = ProductsList.OrderByDescending(item => item.Cost).ToList();
+        //    UpdateListBox(SortedList);
+        //}
 
-        private void Sort_Manufacturer(object sender, RoutedEventArgs e)
-        {
-            List<Products> SortedList = ProductsList.OrderBy(item => item.Manufacturer).ToList();
-            UpdateListBox(SortedList);
-        }
+        //private void Sort_fromCheapToExpensive(object sender, RoutedEventArgs e)
+        //{
+        //    List<Products> SortedList = ProductsList.OrderBy(item => item.Cost).ToList();
+        //    UpdateListBox(SortedList);
+        //}
+
+        //private void Sort_Manufacturer(object sender, RoutedEventArgs e)
+        //{
+        //    List<Products> SortedList = ProductsList.OrderBy(item => item.Manufacturer).ToList();
+        //    UpdateListBox(SortedList);
+        //}
 
         private void UpdateListBox(List<Products> ListToAdd) //Обновляем список товаров
         {
-            listboxProducts.Items.Clear();
-
+            ProductsToShow.Clear();
             foreach (var item in ListToAdd)
             {
-                listboxProducts.Items.Add(item);
+                ProductsToShow.Add(item);
             }
         }
 
@@ -277,6 +362,41 @@ namespace AvaloniaMyProject
         {
             Basket basket = new Basket(_currentUser);
             basket.Show();
+        }
+
+        private void Sort_fromExpensiveToCheap(object sender, RoutedEventArgs e)
+        {
+            _sortCriteria = "CostDesc";
+            ApplyFiltersAndSort();
+        }
+
+        private void Sort_fromCheapToExpensive(object sender, RoutedEventArgs e)
+        {
+            _sortCriteria = "CostAsc";
+            ApplyFiltersAndSort();
+        }
+
+        private void Sort_Manufacturer(object sender, RoutedEventArgs e)
+        {
+            _sortCriteria = "Manufacturer";
+            ApplyFiltersAndSort();
+        }
+
+        private void SearchTextBox_SelectionChanged(object sender, KeyEventArgs e)
+        {
+            _searchText = Search.Text.ToLower();
+            ApplyFiltersAndSort();
+        }
+
+        private void ChooseManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+
+            if (comboBox.SelectedItem != null && comboBox.SelectedItem is ComboBoxItem comboBoxItem)
+            {
+                _selectedManufacturer = comboBoxItem.Content as string ?? "Все производители";
+                ApplyFiltersAndSort();
+            }
         }
     }
 }

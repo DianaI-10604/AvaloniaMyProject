@@ -51,6 +51,7 @@ namespace AvaloniaMyProject
                 };
 
             _managerWindow.UpdateProductsList(newProduct);
+            
 
 
             brush = new SolidColorBrush(Colors.Green); //устаналиваем цвет если не все поля заполнены

@@ -115,12 +115,6 @@
 									
 								</StackPanel>
 								
-								<Button Content="Длбавить в корзину"
-											Background="White"
-											Foreground="Blue"
-											CornerRadius="5"/>
-
-								
 
 								<StackPanel Orientation="Horizontal">
 									<!--Добавить панель изменения кол-ва товара на складе-->

@@ -10,7 +10,7 @@ namespace AvaloniaMyProject
     public partial class MainWindow : Window
     {
         //private Products _product;
-        public static List<Products> AllProducts = new List<Products>(); //здесь будем держать все значения товаров, чтобы они не очищались
+        //public static List<Products> AllProducts = new List<Products>(); //здесь будем держать все значения товаров, чтобы они не очищались
 
         public static List<User> Users = new List<User> {
             new User
@@ -30,17 +30,17 @@ namespace AvaloniaMyProject
             }
         };
 
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        //public MainWindow()
+        //{
+        //    InitializeComponent();
+        //}
 
         //сюда надо передать список товаров
-        public MainWindow(List<Products> products)
+        public MainWindow(/*List<Products> products*/)
         {
             InitializeComponent();
 
-            AllProducts = products;
+            //AllProducts = products;
 
             // Устанавливаем текст прямо из кода
             ErrorMessage.Text = "";
@@ -59,7 +59,7 @@ namespace AvaloniaMyProject
                 if (usercheck != null)
                 {
                     // Вход выполнен успешно
-                    ManagerUserWindow muw = new ManagerUserWindow(usercheck, AllProducts);
+                    ManagerUserWindow muw = new ManagerUserWindow(usercheck /*AllProducts*/);
                     muw.Show();
                     this.Close();
                 }
@@ -76,7 +76,7 @@ namespace AvaloniaMyProject
         {
             User guestUser = new User();
             guestUser.Status = "гость";
-            ManagerUserWindow guest = new ManagerUserWindow(guestUser, AllProducts);
+            ManagerUserWindow guest = new ManagerUserWindow(guestUser /*AllProducts*/);
 
             guest.Show();
             this.Close();
