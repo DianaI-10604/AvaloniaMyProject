@@ -52,13 +52,10 @@
 												ShowGridLines="False">
 
 										<StackPanel Grid.Column="0">
-											<Border Margin="10"
-													BorderBrush="White"
-													BorderThickness="3">
-												<!--Изображение-->
-												<TextBlock Text="Тут будет изображение"
-														   Foreground="White"/>
-											</Border>
+											
+												<Image Source="{Binding ProductImage}" 
+													   Width="100" Height="100"/>
+											
 
 										</StackPanel>
 										<!--Описание товара-->

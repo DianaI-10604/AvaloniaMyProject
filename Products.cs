@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ namespace AvaloniaMyProject
         private int _quantity;  //остаток на складе
         private double _cost;
         private int basketproductquantity = 1;
+        private Bitmap _productImage;
 
         public int BasketProductQuantity
         {
@@ -36,6 +38,16 @@ namespace AvaloniaMyProject
                 _name = value;
                 OnPropertyChanged("Name");
 
+            }
+        }
+
+        public Bitmap ProductImage
+        {
+            get { return _productImage; }
+            set
+            {
+                _productImage = value;
+                OnPropertyChanged("ProductImage");
             }
         }
 

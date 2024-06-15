@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,8 +12,9 @@ namespace AvaloniaMyProject
     {
         private Products _product;
         private ManagerUserWindow _managerwindow;
+        private Bitmap _imageToEdit;
+        private ComboBox _combobox;
 
-        public static List<Products> EditProductsList = new List<Products> {};
 
         public EditProduct()
         {
@@ -20,9 +22,9 @@ namespace AvaloniaMyProject
         }
 
         //передаем сюда из managerUserWindow список, чтобы заново его внести в listbox после редактирования товара
-        public EditProduct(Products product, ManagerUserWindow managerwindow, List<Products> ProductsList)
+        public EditProduct(Products product, ManagerUserWindow managerwindow, ComboBox combobox)
         {
-            EditProductsList = ProductsList;
+            _combobox = combobox;
             _product = product;
             _managerwindow = managerwindow; //чтобы передать сюда listbox И обновить его
 
@@ -62,15 +64,16 @@ namespace AvaloniaMyProject
                 _product.Cost = Convert.ToDouble(_productCostEdit);
             }
 
+            if (_imageToEdit != null)
+            {
+                _product.ProductImage = _imageToEdit;
+            }
             editResultMessage.Text = "Успешно!";
 
-            _managerwindow.listboxProducts.Items.Clear();
+            ManagerUserWindow.UpdateComboBox(Products.ProductsList, _combobox);
+            ManagerUserWindow.ProductsToShow.Clear();
 
-            //чтобы увидеть изменения в listbox, очищаем старый Listbox и заново добавляем товары
-            //после того как наш старый список товаров обновился
-
-            //при выполнении кода выглядит так, будто мы не очищаем список, а просто обновляем отдельные атрибуты
-            foreach (var product in EditProductsList)
+            foreach (var product in Products.ProductsList)
             {
                 if (product.Quantity == 0)
                 {
@@ -83,11 +86,25 @@ namespace AvaloniaMyProject
                     SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
                     product.backgrColor = brush;
                 }
-                _managerwindow.listboxProducts.Items.Add(product);
+                ManagerUserWindow.ProductsToShow.Add(product);
             }
 
             await Task.Delay(1000);
             this.Close();
+        }
+
+        private async void EditImage_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filters.Add(new FileDialogFilter() { Name = "Images", Extensions = { "png", "jpg", "jpeg", "bmp" } });
+
+            var selectedFiles = await dialog.ShowAsync(this);
+
+            if (selectedFiles != null && selectedFiles.Length > 0)
+            {
+                string imagePath = selectedFiles[0];
+                _imageToEdit = new Bitmap(imagePath);
+            }
         }
     }
 }

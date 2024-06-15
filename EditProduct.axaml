@@ -90,6 +90,14 @@
 						FontSize="15.2"
 						CornerRadius="5"/>
 				
+				<Button Content="Изменить изображение"
+						Margin="10 0 0 0"
+						Background="White"
+						Foreground="#0065ff"
+						FontWeight="ExtraBold"
+						Click="EditImage_ButtonClick"
+						FontFamily="nunito"/>
+				
 				<TextBlock Name="editResultMessage"
 						   Text=""
 						   FontSize="15"

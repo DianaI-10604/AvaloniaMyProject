@@ -94,6 +94,13 @@
 						Foreground="#0065ff"
 						FontSize="15.2"
 						CornerRadius="5"/>
+				<Button Content="Добавить изображение"
+						Margin="10 0 0 0"
+						Background="White" CornerRadius="5"
+						Foreground="#0065ff" 
+						FontWeight="ExtraBold"
+						FontFamily="nunito"
+						Click="AddProductImage_ButtonClick"/>
 
 				<TextBlock Name="AddResultMessage"
 						   Text=""

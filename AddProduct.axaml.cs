@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace AvaloniaMyProject
     public partial class AddProduct : Window
     {
         private ManagerUserWindow _managerWindow;
+        private Bitmap _selectedImage;
 
         public AddProduct()
         {
@@ -25,6 +27,19 @@ namespace AvaloniaMyProject
             _managerWindow = managerWindow;
         }
 
+        private async void AddProductImage_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filters.Add(new FileDialogFilter() { Name = "Images", Extensions = { "png", "jpg", "jpeg", "bmp" } });
+
+            var selectedFiles = await dialog.ShowAsync(this);
+
+            if (selectedFiles != null && selectedFiles.Length > 0)
+            {
+                string imagePath = selectedFiles[0];
+                _selectedImage = new Bitmap(imagePath);
+            }
+        }
         private async void AddProduct_ButtonClick(object sender, RoutedEventArgs e)
         {
             var brush = new SolidColorBrush(Colors.Red); //устаналиваем цвет если не все поля заполнены
@@ -47,7 +62,8 @@ namespace AvaloniaMyProject
                     Manufacturer = AddProductManufacturer.Text,
                     Description = AddProductDescription.Text,
                     Quantity = Convert.ToInt32(AddProductQuantity.Text),
-                    Cost = Convert.ToDouble(AddProductCost.Text)
+                    Cost = Convert.ToDouble(AddProductCost.Text),
+                    ProductImage = _selectedImage
                 };
 
             _managerWindow.UpdateProductsList(newProduct);
