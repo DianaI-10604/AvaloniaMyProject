@@ -259,7 +259,8 @@ namespace AvaloniaMyProject
                 (string.IsNullOrWhiteSpace(_searchText) ||
                     product.Name.ToLower().Contains(_searchText) ||
                     product.Manufacturer.ToLower().Contains(_searchText) ||
-                    product.Description.ToLower().Contains(_searchText))
+                    product.Description.ToLower().Contains(_searchText)) ||
+                    product.Cost.ToString().Contains(_searchText)
             );
 
             List<Products> sortedProducts;
